@@ -10,5 +10,7 @@
 // Добавьте сюда заголовочные файлы для предварительной компиляции
 #include <string>
 #include <algorithm>
+#include <vector>
+#include <map>
 
 #endif //PCH_H
