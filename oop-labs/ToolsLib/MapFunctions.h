@@ -30,7 +30,7 @@ std::vector<_It> MapFunctions::FindAll(_It start, _It end, _Pred predicate)
 }
 
 template <typename K, typename V, typename _Pred>
-inline std::vector<std::pair<K, V>> MapFunctions::Sort(std::map<K, V> const& map, _Pred predicate)
+std::vector<std::pair<K, V>> MapFunctions::Sort(std::map<K, V> const& map, _Pred predicate)
 {
 	std::vector<std::pair<K, V>> result;
 	std::transform(map.begin(), map.end(), std::back_inserter(result), [](std::pair<K, V> item) { return item; });

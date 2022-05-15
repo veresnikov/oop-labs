@@ -2,6 +2,7 @@
 #include "CTVSet.h"
 #include <iostream>
 #include <string>
+#include <utility>
 
 const std::string SEPARATOR = " ";
 
@@ -17,7 +18,7 @@ void TurnOff(CTVSet& tv)
 	std::cout << "OK" << std::endl;
 }
 
-void SelectChannel(CTVSet& tv, int channel)
+void SelectChannel(CTVSet& tv, const int channel)
 {
 	if (tv.SetChannel(channel))
 	{
@@ -29,7 +30,7 @@ void SelectChannel(CTVSet& tv, int channel)
 	}
 }
 
-void Info(CTVSet& tv)
+void Info(const CTVSet& tv)
 {
 	if (tv.IsTurnedOn())
 	{
@@ -40,7 +41,7 @@ void Info(CTVSet& tv)
 		std::cout << "TV is turned off" << std::endl;
 	}
 	std::cout << "Current channel: " << tv.GetCurrentChannel() << std::endl;
-	std::cout << "Prevous channel: " << tv.GetPrevousChannel() << std::endl;
+	std::cout << "Previous channel: " << tv.GetPreviousChannel() << std::endl;
 	auto aliasList = tv.GetChannelAliasList();
 	if (aliasList.empty())
 	{
@@ -48,16 +49,16 @@ void Info(CTVSet& tv)
 	}
 	else
 	{
-		for (auto i = aliasList.begin(); i != aliasList.end(); i++)
+		for (auto i = aliasList.begin(); i != aliasList.end(); ++i)
 		{
 			std::cout << i->second << " - " << i->first << std::endl;
 		}
 	}
 }
 
-void SelectPrevousChannel(CTVSet& tv)
+void SelectPreviousChannel(CTVSet& tv)
 {
-	if (tv.SelectPrevousChannel())
+	if (tv.SelectPreviousChannel())
 	{
 		std::cout << "OK" << std::endl;
 	}
@@ -67,7 +68,7 @@ void SelectPrevousChannel(CTVSet& tv)
 	}
 }
 
-void SetChannelName(CTVSet& tv, std::string name, int channel)
+void SetChannelName(CTVSet& tv, const std::string& name, const int channel)
 {
 	if (tv.SetChannelName(channel, name))
 	{
@@ -79,7 +80,7 @@ void SetChannelName(CTVSet& tv, std::string name, int channel)
 	}
 }
 
-void DeleteChannelName(CTVSet& tv, std::string name)
+void DeleteChannelName(CTVSet& tv, const std::string& name)
 {
 	if (tv.DeleteChannelName(name))
 	{
@@ -91,9 +92,9 @@ void DeleteChannelName(CTVSet& tv, std::string name)
 	}
 }
 
-void GetChannelName(CTVSet& tv, int channel)
+void GetChannelName(CTVSet& tv, const int channel)
 {
-	auto result = tv.GetChannelName(channel);
+	const auto result = tv.GetChannelName(channel);
 	if (result != std::nullopt)
 	{
 		std::cout << result.value() << std::endl;
@@ -104,9 +105,9 @@ void GetChannelName(CTVSet& tv, int channel)
 	}
 }
 
-void GetChannelByName(CTVSet& tv, std::string name)
+void GetChannelByName(CTVSet& tv, const std::string& name)
 {
-	auto result = tv.GetChannelByName(name);
+	const auto result = tv.GetChannelByName(name);
 	if (result != std::nullopt)
 	{
 		std::cout << result.value() << std::endl;
@@ -117,15 +118,15 @@ void GetChannelByName(CTVSet& tv, std::string name)
 	}
 }
 
-void ParseCommand(CTVSet& tv, std::string input)
+void ParseCommand(CTVSet& tv, const std::string& input)
 {
-	auto args = StringsFunctions::Explode(input, SEPARATOR);
+	const auto args = StringsFunctions::Explode(input, SEPARATOR);
 	if (args.empty())
 	{
 		std::cout << "invalid input" << std::endl;
 		return;
 	}
-	auto command = args[0];
+	const std::string command = args[0];
 	if (command == "TurnOn")
 	{
 		TurnOn(tv);
@@ -147,9 +148,9 @@ void ParseCommand(CTVSet& tv, std::string input)
 	{
 		Info(tv);
 	}
-	else if (command == "SelectPrevousChannel")
+	else if (command == "SelectPreviousChannel")
 	{
-		SelectPrevousChannel(tv);
+		SelectPreviousChannel(tv);
 	}
 	else if (command == "SetChannelName")
 	{
@@ -178,7 +179,7 @@ void ParseCommand(CTVSet& tv, std::string input)
 				  << "1) TurnOn \n"
 				  << "2) TurnOff \n"
 				  << "3) SelectChannel \n"
-				  << "4) SelectPrevousChannel \n"
+				  << "4) SelectPreviousChannel \n"
 				  << "5) SetChannelName \n"
 				  << "6) DeleteChannelName \n"
 				  << "7) GetChannelName \n"

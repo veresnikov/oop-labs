@@ -143,12 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TVTests.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\TV\TV.vcxproj">
       <Project>{f0f14b4d-5715-4ea1-80a9-9273a27084f8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TVTests.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

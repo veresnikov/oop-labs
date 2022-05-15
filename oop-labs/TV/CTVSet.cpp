@@ -1,4 +1,6 @@
 #include "CTVSet.h"
+#include "../ToolsLib/MapFunctions.h"
+#include "../ToolsLib/StringsFunctions.h"
 
 bool CTVSet::IsTurnedOn() const
 {
@@ -20,12 +22,12 @@ int CTVSet::GetCurrentChannel() const
 	return IsTurnedOn() ? m_channel : 0;
 }
 
-int CTVSet::GetPrevousChannel() const
+int CTVSet::GetPreviousChannel() const
 {
 	return IsTurnedOn() ? m_prevChannel : 0;
 }
 
-bool CTVSet::SetChannel(int channel)
+bool CTVSet::SetChannel(const int channel)
 {
 	if (!IsTurnedOn() || !IsValidChannelNumber(channel))
 	{
@@ -36,7 +38,7 @@ bool CTVSet::SetChannel(int channel)
 	return true;
 }
 
-bool CTVSet::SetChannel(std::string channel)
+bool CTVSet::SetChannel(const std::string& channel)
 {
 	if (!IsTurnedOn() || m_channelAliasList.count(channel) == 0)
 	{
@@ -47,23 +49,23 @@ bool CTVSet::SetChannel(std::string channel)
 	return true;
 }
 
-bool CTVSet::SelectPrevousChannel()
+bool CTVSet::SelectPreviousChannel()
 {
-	return SetChannel(GetPrevousChannel());
+	return SetChannel(GetPreviousChannel());
 }
 
-bool CTVSet::SetChannelName(int channel, std::string name)
+bool CTVSet::SetChannelName(const int channel, const std::string& name)
 {
 	if (!IsTurnedOn() || !IsValidChannelNumber(channel))
 	{
 		return false;
 	}
-	std::string n = StringsFunctions::RemoveExtraSpaces(name);
+	const std::string n = StringsFunctions::RemoveExtraSpaces(name);
 	if (n.empty())
 	{
 		return false;
 	}
-	auto result = GetExistChannelName(channel);
+	const auto result = GetExistChannelName(channel);
 	if (result != m_channelAliasList.end())
 	{
 		m_channelAliasList.erase(result);
@@ -72,7 +74,7 @@ bool CTVSet::SetChannelName(int channel, std::string name)
 	return true;
 }
 
-bool CTVSet::DeleteChannelName(std::string name)
+bool CTVSet::DeleteChannelName(const std::string& name)
 {
 	if (!IsTurnedOn() || m_channelAliasList.count(name) == 0)
 	{
@@ -82,21 +84,21 @@ bool CTVSet::DeleteChannelName(std::string name)
 	return true;
 }
 
-std::vector<std::pair<std::string, int>> CTVSet::GetChannelAliasList()
+std::vector<std::pair<std::string, int>> CTVSet::GetChannelAliasList() const
 {
-	auto result = MapFunctions::Sort(m_channelAliasList, [](std::pair<std::string, int> first, std::pair<std::string, int> second) -> bool {
+	auto result = MapFunctions::Sort(m_channelAliasList, [](const std::pair<std::string, int>& first, const std::pair<std::string, int>& second) -> bool {
 		return first.second < second.second;
 	});
 	return result;
 }
 
-std::optional<std::string> CTVSet::GetChannelName(int channel)
+std::optional<std::string> CTVSet::GetChannelName(const int channel)
 {
 	if (!IsTurnedOn())
 	{
 		return std::nullopt;
 	}
-	auto result = GetExistChannelName(channel);
+	const auto result = GetExistChannelName(channel);
 	if (result == m_channelAliasList.end())
 	{
 		return std::nullopt;
@@ -104,7 +106,7 @@ std::optional<std::string> CTVSet::GetChannelName(int channel)
 	return result->first;
 }
 
-std::optional<int> CTVSet::GetChannelByName(std::string name)
+std::optional<int> CTVSet::GetChannelByName(const std::string& name)
 {
 	if (!IsTurnedOn())
 	{
@@ -119,7 +121,7 @@ std::optional<int> CTVSet::GetChannelByName(std::string name)
 
 std::map<std::string, int>::iterator CTVSet::GetExistChannelName(int channel)
 {
-	auto result = MapFunctions::FindAll(m_channelAliasList.begin(), m_channelAliasList.end(), [channel](std::pair<std::string, int> item) -> bool {
+	auto result = MapFunctions::FindAll(m_channelAliasList.begin(), m_channelAliasList.end(), [channel](const std::pair<std::string, int>& item) -> bool {
 		return item.second == channel;
 	});
 	if (result.empty())
@@ -129,7 +131,7 @@ std::map<std::string, int>::iterator CTVSet::GetExistChannelName(int channel)
 	return result[0];
 }
 
-bool CTVSet::IsValidChannelNumber(int channel)
+bool CTVSet::IsValidChannelNumber(const int channel)
 {
 	return (channel >= 1 && channel <= 99);
 }

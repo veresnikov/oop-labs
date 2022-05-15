@@ -3,8 +3,6 @@
 #include <string>
 #include <optional>
 #include <vector>
-#include "..\ToolsLib\MapFunctions.h"
-#include "..\ToolsLib\StringsFunctions.h"
 
 class CTVSet
 {
@@ -13,15 +11,15 @@ public:
 	void TurnOn();
 	void TurnOff();
 	int GetCurrentChannel() const;
-	int GetPrevousChannel() const;
+	int GetPreviousChannel() const;
 	bool SetChannel(int channel);
-	bool SetChannel(std::string channel);
-	bool SelectPrevousChannel();
-	bool SetChannelName(int channel, std::string name);
-	bool DeleteChannelName(std::string name);
-	std::vector<std::pair<std::string, int>> GetChannelAliasList();
+	bool SetChannel(const std::string& channel);
+	bool SelectPreviousChannel();
+	bool SetChannelName(int channel, const std::string& name);
+	bool DeleteChannelName(const std::string& name);
+	std::vector<std::pair<std::string, int>> GetChannelAliasList() const;
 	std::optional<std::string> GetChannelName(int channel);
-	std::optional<int> GetChannelByName(std::string name);
+	std::optional<int> GetChannelByName(const std::string& name);
 
 private:
 	bool m_isOn = false;
