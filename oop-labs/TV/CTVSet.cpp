@@ -1,6 +1,4 @@
 #include "CTVSet.h"
-#include "..\ToolsLib\StringsFunctions.h"
-#include "..\ToolsLib\MapFunctions.h"
 
 bool CTVSet::IsTurnedOn() const
 {
@@ -76,7 +74,7 @@ bool CTVSet::SetChannelName(int channel, std::string name)
 
 bool CTVSet::DeleteChannelName(std::string name)
 {
-	if (m_channelAliasList.count(name) == 0)
+	if (!IsTurnedOn() || m_channelAliasList.count(name) == 0)
 	{
 		return false;
 	}
@@ -84,8 +82,20 @@ bool CTVSet::DeleteChannelName(std::string name)
 	return true;
 }
 
+std::vector<std::pair<std::string, int>> CTVSet::GetChannelAliasList()
+{
+	auto result = MapFunctions::Sort(m_channelAliasList, [](std::pair<std::string, int> first, std::pair<std::string, int> second) -> bool {
+		return first.second < second.second;
+	});
+	return result;
+}
+
 std::optional<std::string> CTVSet::GetChannelName(int channel)
 {
+	if (!IsTurnedOn())
+	{
+		return std::nullopt;
+	}
 	auto result = GetExistChannelName(channel);
 	if (result == m_channelAliasList.end())
 	{
@@ -96,6 +106,10 @@ std::optional<std::string> CTVSet::GetChannelName(int channel)
 
 std::optional<int> CTVSet::GetChannelByName(std::string name)
 {
+	if (!IsTurnedOn())
+	{
+		return std::nullopt;
+	}
 	if (m_channelAliasList.count(name) == 0)
 	{
 		return std::nullopt;

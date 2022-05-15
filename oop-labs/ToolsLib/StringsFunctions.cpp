@@ -13,6 +13,31 @@ std::string StringsFunctions::Trim(std::string const& arg)
 	return RightTrim(leftTrimmed);
 }
 
+std::vector<std::string> StringsFunctions::Explode(std::string const& input, std::string const& separator)
+{
+	std::vector<std::string> result;
+	size_t position = 0;
+	size_t separatorPosition = input.find(separator, position);
+	if (separatorPosition == std::string::npos)
+	{
+		result.push_back(input);
+		return result;
+	}
+
+	while (position < input.length())
+	{
+		separatorPosition = input.find(separator, position);
+		if (separatorPosition == std::string::npos)
+		{
+			result.push_back(input.substr(position));
+			break;
+		}
+		result.push_back(input.substr(position, separatorPosition - position));
+		position = separatorPosition + separator.length();
+	}
+	return result;
+}
+
 std::string StringsFunctions::LeftTrim(std::string const& arg)
 {
 	std::string result = arg;

@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
-#include "..\ToolsLib\StringsFunctions.h"
 #include "..\ToolsLib\MapFunctions.h"
+#include "..\ToolsLib\StringsFunctions.h"
 #include "..\catch2\catch.hpp"
 #include <vector>
 
@@ -46,6 +46,20 @@ TEST_CASE("Test spaces string")
 	REQUIRE(expected == StringsFunctions::RemoveExtraSpaces(input));
 }
 
+TEST_CASE("Test explode string")
+{
+	std::vector<std::string> expected{ "one", "two", "three", "four" };
+	std::string input = "one two three four";
+	REQUIRE(expected == StringsFunctions::Explode(input, " "));
+}
+
+TEST_CASE("Test explode string with one words")
+{
+	std::vector<std::string> expected{ "one" };
+	std::string input = "one";
+	REQUIRE(expected == StringsFunctions::Explode(input, " "));
+}
+
 TEST_CASE("Test find all")
 {
 	std::map<std::string, int> test = { { "one", 1 }, { "two", 2 }, { "three", 3 } };
@@ -63,4 +77,25 @@ TEST_CASE("Test find all 2")
 	};
 	auto result = MapFunctions::FindAll(test.begin(), test.end(), [](std::pair<std::string, int> item) -> bool { return item.second == 2; });
 	REQUIRE(result.size() == 2);
+}
+
+TEST_CASE("Test sort map by value")
+{
+	std::map<std::string, int> test = {
+		{ "two", 2 },
+		{ "three", 3 },
+		{ "one", 1 }
+	};
+	std::vector<std::pair<std::string, int>> expected{
+		{ "one", 1 },
+		{ "two", 2 },
+		{ "three", 3 },
+	};
+	auto result = MapFunctions::Sort(test, [](std::pair<std::string, int> first, std::pair<std::string, int> second) -> bool { return first.second < second.second; });
+	REQUIRE(expected.size() == result.size());
+	for (size_t i = 0; i < expected.size(); i++)
+	{
+		REQUIRE(expected[i].first == result[i].first);
+		REQUIRE(expected[i].second == result[i].second);
+	}
 }

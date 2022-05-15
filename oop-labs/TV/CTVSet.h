@@ -1,7 +1,10 @@
 #pragma once
-#include "map"
-#include "string"
+#include <map>
+#include <string>
 #include <optional>
+#include <vector>
+#include "..\ToolsLib\MapFunctions.h"
+#include "..\ToolsLib\StringsFunctions.h"
 
 class CTVSet
 {
@@ -16,6 +19,7 @@ public:
 	bool SelectPrevousChannel();
 	bool SetChannelName(int channel, std::string name);
 	bool DeleteChannelName(std::string name);
+	std::vector<std::pair<std::string, int>> GetChannelAliasList();
 	std::optional<std::string> GetChannelName(int channel);
 	std::optional<int> GetChannelByName(std::string name);
 

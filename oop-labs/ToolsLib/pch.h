@@ -12,5 +12,6 @@
 #include <algorithm>
 #include <vector>
 #include <map>
+#include <iterator>
 
 #endif //PCH_H
