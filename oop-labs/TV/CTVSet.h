@@ -17,7 +17,7 @@ public:
 	bool SelectPreviousChannel();
 	bool SetChannelName(int channel, const std::string& name);
 	bool DeleteChannelName(const std::string& name);
-	std::vector<std::pair<std::string, int>> GetChannelAliasList() const;
+	std::optional<std::vector<std::pair<std::string, int>>> GetChannelAliasList() const;
 	std::optional<std::string> GetChannelName(int channel);
 	std::optional<int> GetChannelByName(const std::string& name);
 

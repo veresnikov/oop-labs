@@ -43,13 +43,17 @@ void Info(const CTVSet& tv)
 	std::cout << "Current channel: " << tv.GetCurrentChannel() << std::endl;
 	std::cout << "Previous channel: " << tv.GetPreviousChannel() << std::endl;
 	auto aliasList = tv.GetChannelAliasList();
-	if (aliasList.empty())
+	if (!aliasList.has_value())
+	{
+		std::cout << "Alias list not available" << std::endl;
+	}
+	else if (aliasList.value().empty())
 	{
 		std::cout << "Alias list empty" << std::endl;
 	}
 	else
 	{
-		for (auto i = aliasList.begin(); i != aliasList.end(); ++i)
+		for (auto i = aliasList.value().begin(); i != aliasList.value().end(); ++i)
 		{
 			std::cout << i->second << " - " << i->first << std::endl;
 		}

@@ -1,4 +1,4 @@
-#include "CTVSet.h"
+﻿#include "CTVSet.h"
 #include "../ToolsLib/MapFunctions.h"
 #include "../ToolsLib/StringsFunctions.h"
 
@@ -84,8 +84,12 @@ bool CTVSet::DeleteChannelName(const std::string& name)
 	return true;
 }
 
-std::vector<std::pair<std::string, int>> CTVSet::GetChannelAliasList() const
+std::optional<std::vector<std::pair<std::string, int>>> CTVSet::GetChannelAliasList() const
 {
+	if (!IsTurnedOn())
+	{
+		return std::nullopt;
+	}
 	auto result = MapFunctions::Sort(m_channelAliasList, [](const std::pair<std::string, int>& first, const std::pair<std::string, int>& second) -> bool {
 		return first.second < second.second;
 	});
