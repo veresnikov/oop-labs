@@ -182,12 +182,12 @@ void ParseCommand(CTVSet& tv, const std::string& input)
 		std::cout << "Supported command:\n"
 				  << "1) TurnOn \n"
 				  << "2) TurnOff \n"
-				  << "3) SelectChannel \n"
+				  << "3) SelectChannel <channel number> \n"
 				  << "4) SelectPreviousChannel \n"
-				  << "5) SetChannelName \n"
-				  << "6) DeleteChannelName \n"
-				  << "7) GetChannelName \n"
-				  << "8) GetChannelByName \n"
+				  << "5) SetChannelName <channel name> <channel number> \n"
+				  << "6) DeleteChannelName <channel name> \n"
+				  << "7) GetChannelName <channel number> \n"
+				  << "8) GetChannelByName <channel name> \n"
 				  << "9) Info \n"
 				  << "10) Help \n";
 	}
