@@ -29,6 +29,7 @@ std::vector<_It> MapFunctions::FindAll(_It start, _It end, _Pred predicate)
 	return result;
 }
 
+//TODO: map with compare
 template <typename K, typename V, typename _Pred>
 std::vector<std::pair<K, V>> MapFunctions::Sort(std::map<K, V> const& map, _Pred predicate)
 {

@@ -54,14 +54,14 @@ bool CTVSet::SelectPreviousChannel()
 	return SetChannel(GetPreviousChannel());
 }
 
-bool CTVSet::SetChannelName(const int channel, const std::string& name)
+bool CTVSet::SetChannelName(const int channel, const std::string& channelName)
 {
 	if (!IsTurnedOn() || !IsValidChannelNumber(channel))
 	{
 		return false;
 	}
-	const std::string n = StringsFunctions::RemoveExtraSpaces(name);
-	if (n.empty())
+	const std::string name = StringsFunctions::RemoveExtraSpaces(channelName);
+	if (name.empty())
 	{
 		return false;
 	}
@@ -70,7 +70,7 @@ bool CTVSet::SetChannelName(const int channel, const std::string& name)
 	{
 		m_channelAliasList.erase(result);
 	}
-	m_channelAliasList[n] = channel;
+	m_channelAliasList[name] = channel;
 	return true;
 }
 
