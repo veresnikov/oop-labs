@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\kiril\source\repos\oop-labs\oop-labs\vendor\SFML-2.5.1\sln\CMakeFiles\bddf5be1fe7f626d2e756f83f2c66b0a\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5C09223B-3A4F-3249-9EC6-9E3F173EBA13}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
