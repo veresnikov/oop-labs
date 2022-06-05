@@ -25,7 +25,7 @@ double Rectangle::GetPerimeter() const
 std::string Rectangle::ToString() const
 {
 	std::stringstream ss;
-	ss << std::fixed << std::setprecision(1) << "rectangle " << m_topLeft << " " << m_bottomRight << " " << m_outlineColor << " " << m_outlineWidth << m_fillColor;
+	ss << std::fixed << std::setprecision(1) << "rectangle " << m_topLeft << " " << m_bottomRight << " " << std::hex << m_outlineColor << " " << m_outlineWidth << " " << std::hex << m_fillColor;
 	return ss.str();
 }
 

@@ -24,7 +24,7 @@ double LineSegment::GetPerimeter() const
 std::string LineSegment::ToString() const
 {
 	std::stringstream ss;
-	ss << std::fixed << std::setprecision(1) << "line " << m_startPosition << " " << m_endPosition << " " << m_outlineColor << " " << m_outlineWidth;
+	ss << std::fixed << std::setprecision(1) << "line " << m_startPosition << " " << m_endPosition << " " << std::hex << m_outlineColor << " " << m_outlineWidth;
 	return ss.str();
 }
 

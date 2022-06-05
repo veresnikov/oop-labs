@@ -13,7 +13,7 @@ struct Point
 
 inline std::ostream& operator<<(std::ostream& output, const Point& point)
 {
-	output << "{" << point.x << ", " << point.y << "}";
+	output << "{" << point.x << "," << point.y << "}";
 	return output;
 }
 

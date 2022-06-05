@@ -26,7 +26,7 @@ double Triangle::GetPerimeter() const
 std::string Triangle::ToString() const
 {
 	std::stringstream ss;
-	ss << std::fixed << std::setprecision(1) << "triangle " << m_vertex1 << " " << m_vertex2 << " " << m_vertex3 << m_outlineColor << " " << m_outlineWidth << m_fillColor;
+	ss << std::fixed << std::setprecision(1) << "triangle " << m_vertex1 << " " << m_vertex2 << " " << m_vertex3 << " " << std::hex << m_outlineColor << " " << m_outlineWidth << " " << std::hex << m_fillColor;
 	return ss.str();
 }
 

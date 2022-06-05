@@ -27,7 +27,7 @@ double Circle::GetPerimeter() const
 std::string Circle::ToString() const
 {
 	std::stringstream ss;
-	ss << std::fixed << std::setprecision(1) << "circle " << m_center << " " << m_radius << " " << m_outlineColor << " " << m_outlineWidth << m_fillColor;
+	ss << std::fixed << std::setprecision(1) << "circle " << m_center << " " << m_radius << " " << std::hex << m_outlineColor << " " << m_outlineWidth << " " << std::hex << m_fillColor;
 	return ss.str();
 }
 
