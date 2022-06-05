@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight, uint32_t outlineColor, double outlineWidth, uint32_t fillColor)
+Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight, const uint32_t outlineColor, const double outlineWidth, const uint32_t fillColor)
 	: m_topLeft(topLeft)
 	, m_bottomRight(bottomRight)
 	, m_outlineColor(outlineColor)

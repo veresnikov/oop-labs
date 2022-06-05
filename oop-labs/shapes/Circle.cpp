@@ -5,7 +5,7 @@
 #include <numbers>
 #include <sstream>
 
-Circle::Circle(const Point& center, double radius, uint32_t outlineColor, double outlineWidth, uint32_t fillColor)
+Circle::Circle(const Point& center, const double radius, const uint32_t outlineColor, const double outlineWidth, const uint32_t fillColor)
 	: m_center(center)
 	, m_radius(radius)
 	, m_outlineColor(outlineColor)

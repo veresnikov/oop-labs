@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-Triangle::Triangle(const Point& vertex1, const Point& vertex2, const Point& vertex3, uint32_t outlineColor, double outlineWidth, uint32_t fillColor)
+Triangle::Triangle(const Point& vertex1, const Point& vertex2, const Point& vertex3, const uint32_t outlineColor, const double outlineWidth, const uint32_t fillColor)
 	: m_vertex1(vertex1)
 	, m_vertex2(vertex2)
 	, m_vertex3(vertex3)

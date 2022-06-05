@@ -1,4 +1,5 @@
 #include "ShapesFactory.h"
+#include "../ToolsLib/StringsFunctions.h"
 
 std::shared_ptr<LineSegment> ShapesFactory::CreateLineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor, double outlineWidth)
 {

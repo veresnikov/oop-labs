@@ -5,6 +5,7 @@
 #include "Triangle.h"
 
 #include <memory>
+#include <vector>
 
 class ShapesFactory
 {

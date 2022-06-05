@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor, double outlineWidth)
+LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, const uint32_t outlineColor, const double outlineWidth)
 	: m_startPosition(startPosition)
 	, m_endPosition(endPosition)
 	, m_outlineColor(outlineColor)

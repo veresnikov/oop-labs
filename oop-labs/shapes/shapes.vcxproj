@@ -145,6 +145,7 @@
     <ClCompile Include="Rectangle.cpp" />
     <ClCompile Include="shapes.cpp" />
     <ClCompile Include="ShapesFactory.cpp" />
+    <ClCompile Include="ShapesParser.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="Rectangle.h" />
     <ClInclude Include="ShapesFactory.h" />
+    <ClInclude Include="ShapesParser.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
