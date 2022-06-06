@@ -23,9 +23,9 @@ std::shared_ptr<IShape> ShapesParser::Parse(const std::string& input) const
 		{
 			return ParseCircle(params);
 		}
-		throw std::runtime_error("Unknown shape type");
+		throw std::invalid_argument("Unknown shape type");
 	}
-	throw std::runtime_error("Incorrect input string");
+	throw std::invalid_argument("Incorrect input string");
 }
 
 void ShapesParser::assertColor(const std::string& color, uint32_t& output) const
@@ -40,10 +40,10 @@ void ShapesParser::assertColor(const std::string& color, uint32_t& output) const
 		}
 		catch (const std::exception& exception)
 		{
-			throw std::runtime_error(std::string("Color parsing error: ", exception.what()));
+			throw std::invalid_argument(std::string("Color parsing error: ", exception.what()));
 		}
 	}
-	throw std::runtime_error("Invalid color input");
+	throw std::invalid_argument("Invalid color input");
 }
 
 void ShapesParser::assertPoint(const std::string& point, Point& output) const
@@ -61,20 +61,26 @@ void ShapesParser::assertPoint(const std::string& point, Point& output) const
 
 			if (values.size() == 2)
 			{
+				auto x = std::stod(values[0]);
+				auto y = std::stod(values[1]);
+				if (x < 0 || y < 0)
+				{
+					throw std::invalid_argument("Invalid value");
+				}
 				output = {
-					std::stod(values[0]),
-					std::stod(values[1])
+					x,
+					y
 				};
 				return;
 			}
-			throw std::runtime_error("Incorrect number of values");
+			throw std::invalid_argument("Incorrect number of values");
 		}
 		catch (const std::exception& exception)
 		{
-			throw std::runtime_error("Point parsing error: " + std::string(exception.what()));
+			throw std::invalid_argument("Point parsing error: " + std::string(exception.what()));
 		}
 	}
-	throw std::runtime_error("Invalid point input");
+	throw std::invalid_argument("Invalid point input");
 }
 
 void ShapesParser::assertDouble(const std::string& value, double& output) const
@@ -84,19 +90,28 @@ void ShapesParser::assertDouble(const std::string& value, double& output) const
 	{
 		try
 		{
-			output = std::stod(value);
+			auto v = std::stod(value);
+			if (v < 0)
+			{
+				throw std::invalid_argument("Incorrect value");
+			}
+			output = v;
 			return;
 		}
 		catch (const std::exception& exception)
 		{
-			throw std::runtime_error("Double value parsing error: " + std::string(exception.what()));
+			throw std::invalid_argument("Double value parsing error: " + std::string(exception.what()));
 		}
 	}
-	throw std::runtime_error("Invalid double value input");
+	throw std::invalid_argument("Invalid double value input");
 }
 
 std::shared_ptr<LineSegment> ShapesParser::ParseLineSegment(const std::vector<std::string>& params) const
 {
+	if (params.size() != 5)
+	{
+		throw std::invalid_argument("Invalid line params");
+	}
 	Point startPoint;
 	assertPoint(params[1], startPoint);
 	Point endPoint;
@@ -110,6 +125,10 @@ std::shared_ptr<LineSegment> ShapesParser::ParseLineSegment(const std::vector<st
 
 std::shared_ptr<Rectangle> ShapesParser::ParseRectangle(const std::vector<std::string>& params) const
 {
+	if (params.size() != 6)
+	{
+		throw std::invalid_argument("Invalid rectangle params");
+	}
 	Point topLeft;
 	assertPoint(params[1], topLeft);
 	Point bottomRight;
@@ -125,6 +144,10 @@ std::shared_ptr<Rectangle> ShapesParser::ParseRectangle(const std::vector<std::s
 
 std::shared_ptr<Triangle> ShapesParser::ParseTriangle(const std::vector<std::string>& params) const
 {
+	if (params.size() != 7)
+	{
+		throw std::invalid_argument("Invalid triangle params");
+	}
 	Point vertex1;
 	assertPoint(params[1], vertex1);
 	Point vertex2;
@@ -142,6 +165,10 @@ std::shared_ptr<Triangle> ShapesParser::ParseTriangle(const std::vector<std::str
 
 std::shared_ptr<Circle> ShapesParser::ParseCircle(const std::vector<std::string>& params) const
 {
+	if (params.size() != 6)
+	{
+		throw std::invalid_argument("Invalid circle params");
+	}
 	Point center;
 	assertPoint(params[1], center);
 	double radius;

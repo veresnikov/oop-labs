@@ -1,23 +1,69 @@
 ﻿#include <iostream>
 #include "ShapesParser.h"
 
-int main()
+
+void Parse(const ShapesParser& parser, const std::string& input, std::vector<std::shared_ptr<IShape>>& output)
 {
-	ShapesParser parser;
 	try
 	{
-		auto line = parser.Parse("line {100,101} {200,200.5} ffffff 3.5");
-		auto rectangle = parser.Parse("rectangle {100,100} {200,200.5} fff32f 4 123456");
-		auto triangle = parser.Parse("triangle {1,1} {4,4} {0.5,3} fff32f 4 123456");
-		auto circle = parser.Parse("circle {0,0} 10.679 fff32f 4 123456");
-
-		std::cout << line->ToString() << std::endl;
-		std::cout << rectangle->ToString() << std::endl;
-		std::cout << triangle->ToString() << std::endl;
-		std::cout << circle->ToString() << std::endl;
+		parser.Parse(input);
 	}
 	catch (const std::exception& exception)
 	{
 		std::cout << exception.what() << std::endl;
 	}
+}
+
+void PrintShapesInfo(const std::vector<std::shared_ptr<IShape>>& shapes)
+{
+	if (shapes.empty())
+	{
+		std::cout << "Empty" << std::endl;
+		return;
+
+	}
+	for (auto shape : shapes)
+	{
+		std::cout << shape->ToString() << std::endl;	
+	}
+}
+
+void Help()
+{
+	std::cout << "Available command:" << std::endl;
+	std::cout << "printInfo" << std::endl;
+	std::cout << "Shapes example command:" << std::endl;
+	std::cout << "line {x,y} {x,y} ffffff (line width)" << std::endl;
+	std::cout << "rectangle {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
+	std::cout << "triangle {x,y} {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
+	std::cout << "circle {x,y} r ffffff (line width) ffffff" << std::endl;
+	std::cout << "exit" << std::endl;
+}
+
+int main()
+{
+	ShapesParser parser;
+	std::vector<std::shared_ptr<IShape>> shapes;
+	while (true)
+	{
+		std::string input;
+		std::cin >> input;
+		if (input == "help")
+		{
+			Help();
+		}
+		else if (input == "exit")
+		{
+			break;
+		}
+		else if (input == "printInfo")
+		{
+			PrintShapesInfo(shapes);
+		}
+		else
+		{
+			Parse(parser, input, shapes);
+		}
+	}
+	
 }
