@@ -22,6 +22,7 @@ public:
 private:
 	Point m_topLeft;
 	Point m_bottomRight;
+	//todo вынести это дерьмо
 	uint32_t m_outlineColor;
 	uint32_t m_fillColor;
 	double m_outlineWidth;

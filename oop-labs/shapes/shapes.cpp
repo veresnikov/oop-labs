@@ -6,7 +6,7 @@ void Parse(const ShapesParser& parser, const std::string& input, std::vector<std
 {
 	try
 	{
-		parser.Parse(input);
+		output.push_back(parser.Parse(input));
 	}
 	catch (const std::exception& exception)
 	{
@@ -20,7 +20,6 @@ void PrintShapesInfo(const std::vector<std::shared_ptr<IShape>>& shapes)
 	{
 		std::cout << "Empty" << std::endl;
 		return;
-
 	}
 	for (auto shape : shapes)
 	{

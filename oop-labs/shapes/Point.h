@@ -17,6 +17,8 @@ inline std::ostream& operator<<(std::ostream& output, const Point& point)
 	return output;
 }
 
+
+//todo вынести
 inline double Point::GetLine(const Point& second) const
 {
 	return std::sqrt(std::pow(x - second.x, 2) + std::pow(y - second.y, 2));
