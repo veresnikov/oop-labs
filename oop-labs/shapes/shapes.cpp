@@ -1,6 +1,5 @@
-﻿#include <iostream>
-#include "ShapesParser.h"
-
+﻿#include "ShapesParser.h"
+#include <iostream>
 
 void Parse(const ShapesParser& parser, const std::string& input, std::vector<std::shared_ptr<IShape>>& output)
 {
@@ -23,7 +22,7 @@ void PrintShapesInfo(const std::vector<std::shared_ptr<IShape>>& shapes)
 	}
 	for (auto shape : shapes)
 	{
-		std::cout << shape->ToString() << std::endl;	
+		std::cout << shape->ToString() << std::endl;
 	}
 }
 
@@ -64,5 +63,4 @@ int main()
 			Parse(parser, input, shapes);
 		}
 	}
-	
 }
