@@ -7,7 +7,7 @@ class LineSegment : public IShape
 {
 public:
 	LineSegment() = delete;
-	LineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor, float outlineWidth);
+	LineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor);
 	~LineSegment() override = default;
 
 	[[nodiscard]] float GetArea() const override;
@@ -25,5 +25,4 @@ private:
 	Point m_startPosition;
 	Point m_endPosition;
 	uint32_t m_outlineColor;
-	float m_outlineWidth;
 };

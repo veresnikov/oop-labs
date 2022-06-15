@@ -1,8 +1,8 @@
 #include "ShapesFactory.h"
 
-std::shared_ptr<LineSegment> ShapesFactory::CreateLineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor, float outlineWidth)
+std::shared_ptr<LineSegment> ShapesFactory::CreateLineSegment(const Point& startPosition, const Point& endPosition, uint32_t outlineColor)
 {
-	return std::make_shared<LineSegment>(startPosition, endPosition, outlineColor, outlineWidth);
+	return std::make_shared<LineSegment>(startPosition, endPosition, outlineColor);
 }
 
 std::shared_ptr<Rectangle> ShapesFactory::CreateRectangle(const Point& topLeft, const Point& bottomRight, uint32_t outlineColor, float outlineWidth, uint32_t fillColor)

@@ -108,7 +108,7 @@ void ShapesParser::assertFloat(const std::string& value, float& output) const
 
 std::shared_ptr<LineSegment> ShapesParser::ParseLineSegment(const std::vector<std::string>& params) const
 {
-	if (params.size() != 5)
+	if (params.size() != 4)
 	{
 		throw std::invalid_argument("Invalid line params");
 	}
@@ -118,9 +118,7 @@ std::shared_ptr<LineSegment> ShapesParser::ParseLineSegment(const std::vector<st
 	assertPoint(params[2], endPoint);
 	uint32_t outlineColor;
 	assertColor(params[3], outlineColor);
-	float outlineWidth;
-	assertFloat(params[4], outlineWidth);
-	return ShapesFactory::CreateLineSegment(startPoint, endPoint, outlineColor, outlineWidth);
+	return ShapesFactory::CreateLineSegment(startPoint, endPoint, outlineColor);
 }
 
 std::shared_ptr<Rectangle> ShapesParser::ParseRectangle(const std::vector<std::string>& params) const

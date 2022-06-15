@@ -5,15 +5,11 @@ Canvas::Canvas(sf::RenderWindow& window)
 {
 }
 
-Canvas::~Canvas()
-{
-}
-
-void Canvas::DrawLine(Point start, Point end, float width, uint32_t color)
+void Canvas::DrawLine(Point start, Point end, uint32_t color)
 {
 	sf::Vertex line[] = {
-		sf::Vertex(sf::Vector2f(start.x, start.y), sf::Color(color)),
-		sf::Vertex(sf::Vector2f(end.x, end.y), sf::Color(color))
+		sf::Vertex(sf::Vector2f(start.x, start.y), GetColor(color)),
+		sf::Vertex(sf::Vector2f(end.x, end.y), GetColor(color))
 	};
 	m_window.draw(std::ref(line), 2, sf::Lines);
 }

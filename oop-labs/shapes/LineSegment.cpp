@@ -5,11 +5,10 @@
 #include <iomanip>
 #include <sstream>
 
-LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, const uint32_t outlineColor, const float outlineWidth)
+LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, const uint32_t outlineColor)
 	: m_startPosition(startPosition)
 	, m_endPosition(endPosition)
 	, m_outlineColor(outlineColor)
-	, m_outlineWidth(outlineWidth)
 {
 }
 
@@ -26,7 +25,7 @@ float LineSegment::GetPerimeter() const
 std::string LineSegment::ToString() const
 {
 	std::stringstream ss;
-	ss << std::fixed << std::setprecision(1) << "line " << m_startPosition << " " << m_endPosition << " " << std::hex << m_outlineColor << " " << m_outlineWidth;
+	ss << std::fixed << std::setprecision(1) << "line " << m_startPosition << " " << m_endPosition << " " << std::hex << m_outlineColor;
 	return ss.str();
 }
 
@@ -37,12 +36,12 @@ uint32_t LineSegment::GetOutlineColor() const
 
 float LineSegment::GetOutlineWidth() const
 {
-	return m_outlineWidth;
+	return 1;
 }
 
 void LineSegment::Draw(ICanvas& canvas) const
 {
-	canvas.DrawLine(GetStartPosition(), GetEndPosition(), GetOutlineWidth(), GetOutlineColor());
+	canvas.DrawLine(GetStartPosition(), GetEndPosition(), GetOutlineColor());
 }
 
 Point LineSegment::GetStartPosition() const

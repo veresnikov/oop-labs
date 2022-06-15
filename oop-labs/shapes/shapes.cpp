@@ -34,7 +34,7 @@ void Help()
 	std::cout << "Available command:" << std::endl;
 	std::cout << "printInfo" << std::endl;
 	std::cout << "Shapes example command:" << std::endl;
-	std::cout << "line {x,y} {x,y} ffffff (line width)" << std::endl;
+	std::cout << "line {x,y} {x,y} ffffff" << std::endl;
 	std::cout << "rectangle {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
 	std::cout << "triangle {x,y} {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
 	std::cout << "circle {x,y} r ffffff (line width) ffffff" << std::endl;
