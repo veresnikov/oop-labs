@@ -21,6 +21,7 @@ void Canvas::DrawPolygon(std::vector<Point> points, float width, uint32_t color)
 	{
 		polygon.setPoint(i, sf::Vector2f(points[i].x, points[i].y));
 	}
+	polygon.setFillColor(sf::Color::Transparent);
 	polygon.setOutlineThickness(width);
 	polygon.setOutlineColor(GetColor(color));
 	polygon.setFillColor(sf::Color::Transparent);
@@ -41,6 +42,7 @@ void Canvas::FillPolygon(std::vector<Point> points, uint32_t color)
 void Canvas::DrawCircle(Point center, float radius, float width, uint32_t color)
 {
 	sf::CircleShape circle(radius);
+	circle.setFillColor(sf::Color::Transparent);
 	circle.setOutlineThickness(width);
 	circle.setOutlineColor(GetColor(color));
 	circle.setPosition(sf::Vector2f(center.x, center.y));

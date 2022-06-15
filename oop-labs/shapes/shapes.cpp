@@ -33,18 +33,19 @@ void Help()
 {
 	std::cout << "Available command:" << std::endl;
 	std::cout << "printInfo" << std::endl;
+	std::cout << "clear" << std::endl;
 	std::cout << "Shapes example command:" << std::endl;
 	std::cout << "line {x,y} {x,y} ffffff" << std::endl;
 	std::cout << "rectangle {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
 	std::cout << "triangle {x,y} {x,y} {x,y} ffffff (line width) ffffff" << std::endl;
 	std::cout << "circle {x,y} r ffffff (line width) ffffff" << std::endl;
-	std::cout << "exit" << std::endl;
 }
 
 int main()
 {
+	std::mutex mu;
 	std::vector<std::shared_ptr<IShape>> shapes;
-	std::thread windowThread([](std::vector<std::shared_ptr<IShape>>& shapes) -> void {
+	std::thread windowThread([](std::vector<std::shared_ptr<IShape>>& shapes, std::mutex& mu) -> void {
 		sf::RenderWindow window(sf::VideoMode(800, 600), "Render");
 		window.setActive(true);
 		Canvas canvas(window);
@@ -58,14 +59,16 @@ int main()
 					window.close();
 			}
 			window.clear(sf::Color::White);
+			mu.lock();
 			for (size_t i = 0; i < shapes.size(); ++i)
 			{
 				shapes[i]->Draw(canvas);
 			}
+			mu.unlock();
 			window.display();
 		}
 	},
-		std::ref(shapes));
+		std::ref(shapes), std::ref(mu));
 	windowThread.detach();
 
 	ShapesParser parser;
@@ -77,17 +80,19 @@ int main()
 		{
 			Help();
 		}
-		else if (input == "exit")
-		{
-			break;
-		}
 		else if (input == "printInfo")
 		{
 			PrintShapesInfo(shapes);
 		}
+		else if (input == "clear")
+		{
+			shapes.clear();
+		}
 		else
 		{
+			mu.lock();
 			Parse(parser, input, shapes);
+			mu.unlock();
 		}
 	}
 }
