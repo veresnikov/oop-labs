@@ -7,7 +7,7 @@ TEST_CASE("Test parsing shapes")
 	ShapesParser parser;
 	SECTION("Correct input")
 	{
-		std::string line("line {100.0,100.0} {200.1,200.0} fff123 3.5");
+		std::string line("line {100.0,100.0} {200.1,200.0} fff123");
 		auto lineShape = parser.Parse(line);
 		REQUIRE(lineShape->ToString() == line);
 
@@ -31,19 +31,19 @@ TEST_CASE("Test parsing shapes")
 		SECTION("Check asserts")
 		{
 			//Incorrect hex
-			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0} ffz123 1.0"), "Invalid color input");
+			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0} ffz123"), "Invalid color input");
 
 			//Incorrect point
-			REQUIRE_THROWS_WITH(parser.Parse("line {-100.0,100.0} {200.0,200.0} fff123 1.0"), "Invalid point input");
-			REQUIRE_THROWS_WITH(parser.Parse("line {100,0,100.0} {200.0,200.0} fff123 1.0"), "Invalid point input");
+			REQUIRE_THROWS_WITH(parser.Parse("line {-100.0,100.0} {200.0,200.0} fff123"), "Invalid point input");
+			REQUIRE_THROWS_WITH(parser.Parse("line {100,0,100.0} {200.0,200.0} fff123"), "Invalid point input");
 
 			//Incorrect double value
-			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0} fff123 1,0"), "Invalid double value input");
-			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0} fff123 -1.0"), "Invalid double value input");
+			REQUIRE_THROWS_WITH(parser.Parse("circle {0.0,0.0} 10.6 fff32f -4.0 123456"), "Invalid double value input");
+			REQUIRE_THROWS_WITH(parser.Parse("circle {0.0,0.0} 10.6 fff32f 0,6 123456"), "Invalid double value input");
 		}
 		SECTION("Check shapes errors")
 		{
-			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0} ffz123"), "Invalid line params");
+			REQUIRE_THROWS_WITH(parser.Parse("line {100.0,100.0} {200.0,200.0}"), "Invalid line params");
 			REQUIRE_THROWS_WITH(parser.Parse("rectangle {100.0,100.0} {200.0,200.0} ffz123"), "Invalid rectangle params");
 			REQUIRE_THROWS_WITH(parser.Parse("triangle {100.0,100.0} {200.0,200.0} ffz123"), "Invalid triangle params");
 			REQUIRE_THROWS_WITH(parser.Parse("circle {100.0,100.0} {200.0,200.0} ffz123"), "Invalid circle params");
@@ -54,7 +54,7 @@ TEST_CASE("Test parsing shapes")
 TEST_CASE("Check shapes function")
 {
 	ShapesParser parser;
-	std::string line("line {100.0,100.0} {200.1,200.0} fff123 3.5");
+	std::string line("line {100.0,100.0} {200.1,200.0} fff123");
 	auto lineShape = parser.Parse(line);
 
 	std::string rectangle("rectangle {100.0,100.0} {200.0,200.5} fff32f 4.0 123456");
