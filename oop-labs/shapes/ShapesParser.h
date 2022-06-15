@@ -10,7 +10,7 @@ public:
 private:
 	void assertColor(const std::string& color, uint32_t& output) const;
 	void assertPoint(const std::string& point, Point& output) const;
-	void assertDouble(const std::string& value, double& output) const;
+	void assertFloat(const std::string& value, float& output) const;
 
 	std::shared_ptr<LineSegment> ParseLineSegment (const std::vector<std::string>& params) const;
 	std::shared_ptr<Rectangle> ParseRectangle(const std::vector<std::string>& params) const;

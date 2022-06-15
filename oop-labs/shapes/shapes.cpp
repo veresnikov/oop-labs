@@ -1,5 +1,8 @@
-﻿#include "ShapesParser.h"
+﻿#include "Canvas.h"
+#include "ShapesParser.h"
 #include <iostream>
+#include <mutex>
+#include <thread>
 
 void Parse(const ShapesParser& parser, const std::string& input, std::vector<std::shared_ptr<IShape>>& output)
 {
@@ -20,9 +23,9 @@ void PrintShapesInfo(const std::vector<std::shared_ptr<IShape>>& shapes)
 		std::cout << "Empty" << std::endl;
 		return;
 	}
-	for (auto shape : shapes)
+	for (size_t i = 0; i < shapes.size(); ++i)
 	{
-		std::cout << shape->ToString() << std::endl;
+		std::cout << shapes[i]->ToString() << std::endl;
 	}
 }
 
@@ -40,12 +43,36 @@ void Help()
 
 int main()
 {
-	ShapesParser parser;
 	std::vector<std::shared_ptr<IShape>> shapes;
+	std::thread windowThread([](std::vector<std::shared_ptr<IShape>>& shapes) -> void {
+		sf::RenderWindow window(sf::VideoMode(800, 600), "Render");
+		window.setActive(true);
+		Canvas canvas(window);
+
+		while (window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+			}
+			window.clear(sf::Color::White);
+			for (size_t i = 0; i < shapes.size(); ++i)
+			{
+				shapes[i]->Draw(canvas);
+			}
+			window.display();
+		}
+	},
+		std::ref(shapes));
+	windowThread.detach();
+
+	ShapesParser parser;
 	while (true)
 	{
 		std::string input;
-		std::cin >> input;
+		std::getline(std::cin, input);
 		if (input == "help")
 		{
 			Help();

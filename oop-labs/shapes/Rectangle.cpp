@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <sstream>
 
-Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight, const uint32_t outlineColor, const double outlineWidth, const uint32_t fillColor)
+Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight, const uint32_t outlineColor, const float outlineWidth, const uint32_t fillColor)
 	: m_topLeft(topLeft)
 	, m_bottomRight(bottomRight)
 	, m_outlineColor(outlineColor)
@@ -12,12 +12,12 @@ Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight, const uint3
 {
 }
 
-double Rectangle::GetArea() const
+float Rectangle::GetArea() const
 {
 	return m_topLeft.GetLine({ m_bottomRight.x, m_topLeft.y }) * m_topLeft.GetLine({ m_topLeft.x, m_bottomRight.y });
 }
 
-double Rectangle::GetPerimeter() const
+float Rectangle::GetPerimeter() const
 {
 	return 2 * (m_topLeft.GetLine({ m_bottomRight.x, m_topLeft.y }) + m_topLeft.GetLine({ m_topLeft.x, m_bottomRight.y }));
 }
@@ -39,9 +39,15 @@ uint32_t Rectangle::GetFillColor() const
 	return m_fillColor;
 }
 
-double Rectangle::GetOutlineWidth() const
+float Rectangle::GetOutlineWidth() const
 {
 	return m_outlineWidth;
+}
+
+void Rectangle::Draw(ICanvas& canvas) const
+{
+	canvas.FillPolygon({ m_topLeft, { m_bottomRight.x, m_topLeft.y }, m_bottomRight, { m_topLeft.x, m_bottomRight.y } }, GetFillColor());
+	canvas.DrawPolygon({ m_topLeft, { m_bottomRight.x, m_topLeft.y }, m_bottomRight, { m_topLeft.x, m_bottomRight.y } }, GetOutlineWidth(), GetOutlineColor());
 }
 
 Point Rectangle::GetTopLeft() const

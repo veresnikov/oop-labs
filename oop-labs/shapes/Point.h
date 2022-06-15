@@ -4,10 +4,10 @@
 
 struct Point
 {
-	double x;
-	double y;
+	float x;
+	float y;
 
-	[[nodiscard]] double GetLine(const Point& second) const;
+	[[nodiscard]] float GetLine(const Point& second) const;
 	friend std::ostream& operator<<(std::ostream& output, const Point& point);
 };
 
@@ -19,8 +19,8 @@ inline std::ostream& operator<<(std::ostream& output, const Point& point)
 
 
 //todo вынести
-inline double Point::GetLine(const Point& second) const
+inline float Point::GetLine(const Point& second) const
 {
-	return std::sqrt(std::pow(x - second.x, 2) + std::pow(y - second.y, 2));
+	return static_cast<float>(std::sqrt(std::pow(x - second.x, 2) + std::pow(y - second.y, 2)));
 }
 

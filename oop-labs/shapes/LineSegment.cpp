@@ -1,9 +1,11 @@
 #include "LineSegment.h"
+#include "ICanvas.h"
+#include "ICanvasDrawable.h"
 
 #include <iomanip>
 #include <sstream>
 
-LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, const uint32_t outlineColor, const double outlineWidth)
+LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, const uint32_t outlineColor, const float outlineWidth)
 	: m_startPosition(startPosition)
 	, m_endPosition(endPosition)
 	, m_outlineColor(outlineColor)
@@ -11,12 +13,12 @@ LineSegment::LineSegment(const Point& startPosition, const Point& endPosition, c
 {
 }
 
-double LineSegment::GetArea() const
+float LineSegment::GetArea() const
 {
 	return GetPerimeter();
 }
 
-double LineSegment::GetPerimeter() const
+float LineSegment::GetPerimeter() const
 {
 	return m_startPosition.GetLine(m_endPosition);
 }
@@ -33,9 +35,14 @@ uint32_t LineSegment::GetOutlineColor() const
 	return m_outlineColor;
 }
 
-double LineSegment::GetOutlineWidth() const
+float LineSegment::GetOutlineWidth() const
 {
 	return m_outlineWidth;
+}
+
+void LineSegment::Draw(ICanvas& canvas) const
+{
+	canvas.DrawLine(GetStartPosition(), GetEndPosition(), GetOutlineWidth(), GetOutlineColor());
 }
 
 Point LineSegment::GetStartPosition() const

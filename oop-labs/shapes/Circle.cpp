@@ -5,7 +5,7 @@
 #include <numbers>
 #include <sstream>
 
-Circle::Circle(const Point& center, const double radius, const uint32_t outlineColor, const double outlineWidth, const uint32_t fillColor)
+Circle::Circle(const Point& center, const float radius, const uint32_t outlineColor, const float outlineWidth, const uint32_t fillColor)
 	: m_center(center)
 	, m_radius(radius)
 	, m_outlineColor(outlineColor)
@@ -14,14 +14,14 @@ Circle::Circle(const Point& center, const double radius, const uint32_t outlineC
 {
 }
 
-double Circle::GetArea() const
+float Circle::GetArea() const
 {
-	return std::numbers::pi * std::pow(m_radius, 2);
+	return static_cast<float>(std::numbers::pi * std::pow(m_radius, 2));
 }
 
-double Circle::GetPerimeter() const
+float Circle::GetPerimeter() const
 {
-	return 2 * std::numbers::pi * m_radius;
+	return 2 * static_cast<float>(std::numbers::pi) * m_radius;
 }
 
 std::string Circle::ToString() const
@@ -41,9 +41,15 @@ uint32_t Circle::GetFillColor() const
 	return m_fillColor;
 }
 
-double Circle::GetOutlineWidth() const
+float Circle::GetOutlineWidth() const
 {
 	return m_outlineWidth;
+}
+
+void Circle::Draw(ICanvas& canvas) const
+{
+	canvas.FillCircle(GetCenter(), GetRadius(), GetFillColor());
+	canvas.DrawCircle(GetCenter(), GetRadius(), GetOutlineWidth(), GetOutlineColor());
 }
 
 Point Circle::GetCenter() const
@@ -51,7 +57,7 @@ Point Circle::GetCenter() const
 	return m_center;
 }
 
-double Circle::GetRadius() const
+float Circle::GetRadius() const
 {
 	return m_radius;
 }
