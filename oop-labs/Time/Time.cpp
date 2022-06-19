@@ -1,8 +1,38 @@
 ﻿#include "pch.h"
 #include "Time.h"
+#include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <cmath>
+#include <string>
+#include <vector>
+
+namespace 
+{
+std::vector<std::string> Explode(std::string const& input, std::string const& separator)
+{
+	std::vector<std::string> result;
+	size_t position = 0;
+	size_t separatorPosition = input.find(separator, position);
+	if (separatorPosition == std::string::npos)
+	{
+		result.push_back(input);
+		return result;
+	}
+
+	while (position < input.length())
+	{
+		separatorPosition = input.find(separator, position);
+		if (separatorPosition == std::string::npos)
+		{
+			result.push_back(input.substr(position));
+			break;
+		}
+		result.push_back(input.substr(position, separatorPosition - position));
+		position = separatorPosition + separator.length();
+	}
+	return result;
+}
+}
 
 constexpr unsigned SECONDS_PER_HOUR = 60 * 60;
 constexpr unsigned SECONDS_PER_MINUTE = 60;
@@ -130,6 +160,11 @@ Time Time::operator/=(int div)
 	return *this;
 }
 
+Time operator*(int i, Time time)
+{
+	return time * i;
+}
+
 std::ostream& operator<<(std::ostream& stream, const Time& time)
 {
 	stream << std::setw(2) << std::setfill('0') << time.GetHours();
@@ -142,6 +177,21 @@ std::ostream& operator<<(std::ostream& stream, const Time& time)
 
 std::istream& operator>>(std::istream& stream, Time& time)
 {
+	std::string str;
+	stream >> str;
+	auto args = Explode(str, ":");
+	if (args.size() != 3)
+	{
+		throw std::logic_error("Incorrect time string");
+	}
+	auto h = std::stoi(args[0]);
+	auto m = std::stoi(args[1]);
+	auto s = std::stoi(args[2]);
+	if (h > 23 || m > 59 || s > 59 || h < 0 || m < 0 || s < 0)
+	{
+		throw std::logic_error("Invalid input arguments");
+	}
+	time.m_timestamp = h * SECONDS_PER_HOUR + m * SECONDS_PER_MINUTE + s;
 	return stream;
 }
 

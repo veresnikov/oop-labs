@@ -7,8 +7,9 @@ TEST_CASE("Example")
 	try
 	{
 		Time t(9, 15, 40);
-		std::cout << t / Time(03, 05, 13) << std::endl;
-
+		std::stringstream ss("10:10:10");
+		ss >> t;
+		std::cout << t << std::endl;
 	}
 	catch (std::exception& ex)
 	{

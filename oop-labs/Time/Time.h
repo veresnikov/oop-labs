@@ -17,6 +17,7 @@ public:
 	Time operator+(Time);
 	Time operator-(Time);
 	Time operator*(int);
+	friend Time operator*(int, Time);
 	Time operator/(int);
 	unsigned operator/(Time);
 	Time operator+=(Time);
