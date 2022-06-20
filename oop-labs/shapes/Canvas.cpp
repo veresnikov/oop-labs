@@ -14,7 +14,7 @@ void Canvas::DrawLine(Point start, Point end, uint32_t color)
 	m_window.draw(std::ref(line), 2, sf::Lines);
 }
 
-void Canvas::DrawPolygon(const std::vector<Point>& points, float width, uint32_t color) const
+void Canvas::DrawPolygon(const std::vector<Point>& points, float width, uint32_t color)
 {
 	sf::ConvexShape polygon(points.size());
 	for (size_t i = 0; i < points.size(); ++i)
@@ -28,7 +28,7 @@ void Canvas::DrawPolygon(const std::vector<Point>& points, float width, uint32_t
 	m_window.draw(std::ref(polygon));
 }
 
-void Canvas::FillPolygon(const std::vector<Point>& points, uint32_t color) const
+void Canvas::FillPolygon(const std::vector<Point>& points, uint32_t color)
 {
 	sf::ConvexShape polygon(points.size());
 	for (size_t i = 0; i < points.size(); ++i)
