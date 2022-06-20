@@ -14,16 +14,15 @@ public:
 	Time operator++(int);
 	Time& operator--();
 	Time operator--(int);
-	Time operator+(Time);
-	Time operator-(Time);
-	Time operator*(int);
+	friend Time operator+(Time, Time);
+	friend Time operator-(Time, Time);
+	friend Time operator*(Time, int);
 	friend Time operator*(int, Time);
-	Time operator/(int);
-	unsigned operator/(Time);
+	friend Time operator/(Time, int);
+	friend unsigned operator/(Time, Time);
 	Time operator+=(Time);
 	Time operator-=(Time);
 	Time operator*=(int);
-	Time operator/=(Time);
 	Time operator/=(int);
 	friend std::ostream& operator<<(std::ostream&, const Time&);
 	friend std::istream& operator>>(std::istream&, Time&);
@@ -36,9 +35,9 @@ public:
 private:
 	unsigned GetHoursTimestamp() const;
 	unsigned GetMinutesTimestamp() const;
-	void TimestampAdjustmentForAdd(unsigned);
-	void TimestampAdjustmentForSub(unsigned);
-	void TimestampAdjustmentForMul(int);
+	static Time TimestampAdjustmentForAdd(Time, unsigned);
+	static Time TimestampAdjustmentForSub(Time, unsigned);
+	static Time TimestampAdjustmentForMul(Time, int);
 
 	unsigned m_timestamp;
 };

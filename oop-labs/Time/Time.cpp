@@ -73,7 +73,8 @@ unsigned Time::GetSeconds() const
 
 Time& Time::operator++()
 {
-	TimestampAdjustmentForAdd(1);
+	auto t = TimestampAdjustmentForAdd(*this, 1);
+	this->m_timestamp = t.m_timestamp;
 	return *this;
 }
 
@@ -86,7 +87,8 @@ Time Time::operator++(int)
 
 Time& Time::operator--()
 {
-	TimestampAdjustmentForSub(1);
+	auto t = TimestampAdjustmentForSub(*this, 1);
+	this->m_timestamp = t.m_timestamp;
 	return *this;
 }
 
@@ -97,66 +99,57 @@ Time Time::operator--(int)
 	return old;
 }
 
-Time Time::operator+(Time right)
+Time operator+(Time left, Time right)
 {
-	TimestampAdjustmentForAdd(right.m_timestamp);
-	return *this;
+	return Time::TimestampAdjustmentForAdd(left, right.m_timestamp);
 }
 
-Time Time::operator-(Time right)
+Time operator-(Time left, Time right)
 {
-	TimestampAdjustmentForSub(right.m_timestamp);
-	return *this;
+	return Time::TimestampAdjustmentForSub(left, right.m_timestamp);
 }
 
-Time Time::operator*(int mul)
+Time operator*(Time time, int mul)
 {
-	TimestampAdjustmentForMul(mul);
-	return *this;
+	return Time::TimestampAdjustmentForMul(time, mul);
 }
 
-Time Time::operator/(int div)
+Time operator/(Time time, int div)
 {
-	auto h = GetHours() / div;
-	auto m = GetMinutes() / div;
-	m += std::round(((static_cast<double>(GetHours()) / div - h) * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
-	auto s = GetSeconds() / div;
-	m_timestamp = h * SECONDS_PER_HOUR + m * SECONDS_PER_MINUTE + s;
-	return *this;
+	auto h = time.GetHours() / div;
+	auto m = time.GetMinutes() / div;
+	m += std::round(((static_cast<double>(time.GetHours()) / div - h) * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+	auto s = time.GetSeconds() / div;
+	time.m_timestamp = h * SECONDS_PER_HOUR + m * SECONDS_PER_MINUTE + s;
+	return time;
 }
 
-unsigned Time::operator/(Time div)
+unsigned operator/(Time time, Time div)
 {
-	return m_timestamp / div.m_timestamp;
+	return time.m_timestamp / div.m_timestamp;
 }
 
 Time Time::operator+=(Time right)
 {
-	operator+(right);
+	this->m_timestamp = operator+(*this, right).m_timestamp;
 	return *this;
 }
 
 Time Time::operator-=(Time right)
 {
-	operator-(right);
+	this->m_timestamp = operator-(*this, right).m_timestamp;
 	return *this;
 }
 
 Time Time::operator*=(int mul)
 {
-	operator*(mul);
-	return *this;
-}
-
-Time Time::operator/=(Time div)
-{
-	operator/(div);
+	this->m_timestamp = operator*(*this, mul).m_timestamp;
 	return *this;
 }
 
 Time Time::operator/=(int div)
 {
-	operator/(div);
+	this->m_timestamp = operator/(*this, div).m_timestamp;
 	return *this;
 }
 
@@ -230,33 +223,38 @@ unsigned Time::GetMinutesTimestamp() const
 	return GetMinutes() * SECONDS_PER_MINUTE;
 }
 
-void Time::TimestampAdjustmentForAdd(unsigned diffTimestamp)
+Time Time::TimestampAdjustmentForAdd(Time time, unsigned diffTimestamp)
 {
-	m_timestamp += diffTimestamp;
-	if (m_timestamp >= MAX_TIMESTAMP)
+	time.m_timestamp += diffTimestamp;
+	if (time.m_timestamp >= MAX_TIMESTAMP)
 	{
-		auto excess = m_timestamp / MAX_TIMESTAMP;
-		m_timestamp -= excess * MAX_TIMESTAMP;
+		auto excess = time.m_timestamp / MAX_TIMESTAMP;
+		time.m_timestamp -= excess * MAX_TIMESTAMP;
 	}
+	return time;
 }
 
-void Time::TimestampAdjustmentForSub(unsigned diffTimestamp)
+Time Time::TimestampAdjustmentForSub(Time time, unsigned diffTimestamp)
 {
-	m_timestamp -= diffTimestamp;
-	if (m_timestamp > MAX_TIMESTAMP)
+	auto temp = time.m_timestamp;
+	time.m_timestamp -= diffTimestamp;
+	if (time.m_timestamp > MAX_TIMESTAMP)
 	{
-		m_timestamp = MAX_TIMESTAMP;
-		m_timestamp -= diffTimestamp;
+		time.m_timestamp = MAX_TIMESTAMP;
+		time.m_timestamp -= diffTimestamp;
+		time.m_timestamp += temp;
 	}
+	return time;
 }
 
-void Time::TimestampAdjustmentForMul(int mul)
+Time Time::TimestampAdjustmentForMul(Time time, int mul)
 {
-	auto newTimestamp = GetHours() * mul * SECONDS_PER_HOUR + GetMinutes() * mul * SECONDS_PER_MINUTE + GetSeconds() * mul;
+	auto newTimestamp = time.GetHours() * mul * SECONDS_PER_HOUR + time.GetMinutes() * mul * SECONDS_PER_MINUTE + time.GetSeconds() * mul;
 	if (newTimestamp >= MAX_TIMESTAMP)
 	{
 		auto excess = newTimestamp / MAX_TIMESTAMP;
 		newTimestamp -= excess * MAX_TIMESTAMP;
 	}
-	m_timestamp = newTimestamp;
+	time.m_timestamp = newTimestamp;
+	return time;
 }
