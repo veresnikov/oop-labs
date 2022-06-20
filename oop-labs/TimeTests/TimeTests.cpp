@@ -133,4 +133,25 @@ TEST_CASE("Positive tests")
 			REQUIRE(Time(9, 15, 40) / Time(3, 5, 13) == 3);
 		}
 	}
+	SECTION("Bool operators")
+	{
+		REQUIRE(Time(0) == Time(0));
+		REQUIRE(Time(0) != Time(1));
+		REQUIRE(Time(0) < Time(1));
+		REQUIRE(Time(1) > Time(0));
+		REQUIRE(Time(0) == Time(0));
+		REQUIRE(Time(1) <= Time(1));
+		REQUIRE(Time(1) >= Time(1));
+	}
+	SECTION("IO operators")
+	{
+		std::stringstream ss;
+		ss << Time(10, 20);
+		REQUIRE(ss.str() == "10:20:00");
+		Time t(0);
+		ss >> t;
+		REQUIRE(t.GetHours() == 10);
+		REQUIRE(t.GetMinutes() == 20);
+		REQUIRE(t.GetSeconds() == 0);
+	}
 }
