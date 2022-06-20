@@ -53,7 +53,7 @@ TEST_CASE("Positive tests")
 			REQUIRE(temp.GetMinutes() == 0);
 			REQUIRE(temp.GetSeconds() == 3);
 
-			temp += Time(1,0,0);
+			temp += Time(1, 0, 0);
 			REQUIRE(temp.GetHours() == 1);
 			REQUIRE(temp.GetMinutes() == 0);
 			REQUIRE(temp.GetSeconds() == 3);
@@ -153,5 +153,31 @@ TEST_CASE("Positive tests")
 		REQUIRE(t.GetHours() == 10);
 		REQUIRE(t.GetMinutes() == 20);
 		REQUIRE(t.GetSeconds() == 0);
+	}
+}
+
+TEST_CASE("Negative tests")
+{
+	SECTION("Constructor exceptions")
+	{
+		REQUIRE_THROWS(Time(10, 10, 70));
+		REQUIRE_THROWS(Time(10, 60, 0));
+		REQUIRE_THROWS(Time(24, 0, 0));
+
+		REQUIRE_THROWS(Time(9876543));
+	}
+	SECTION("Input exceptions")
+	{
+		std::stringstream ss("10:10:10:10 10:20:60 10:60:00 24:20:00");
+		Time t(0);
+		REQUIRE_THROWS(ss >> t);
+		REQUIRE_THROWS(ss >> t);
+		REQUIRE_THROWS(ss >> t);
+		REQUIRE_THROWS(ss >> t);
+	}
+	SECTION("Arithmetic exceptions")
+	{
+		REQUIRE_THROWS(Time(0) / 0);
+		REQUIRE_THROWS(Time(0) / Time(0));
 	}
 }

@@ -41,9 +41,9 @@ constexpr unsigned MAX_TIMESTAMP = 23 * SECONDS_PER_HOUR + 59 * SECONDS_PER_MINU
 Time::Time(unsigned hours, unsigned minutes, unsigned seconds)
 	: Time(hours * SECONDS_PER_HOUR + minutes * SECONDS_PER_MINUTE + seconds)
 {
-	if (hours > 23 || minutes > 59 || seconds > 59 || hours < 0 || minutes < 0 || seconds < 0)
+	if (Time::Validate(hours, minutes, seconds))
 	{
-		throw std::logic_error("Invalid input arguments");
+		throw std::invalid_argument("Invalid input arguments");
 	}
 }
 
@@ -52,7 +52,7 @@ Time::Time(unsigned timestamp)
 {
 	if (timestamp > MAX_TIMESTAMP || timestamp < 0)
 	{
-		throw std::logic_error("Invalid timestamp value");
+		throw std::invalid_argument("Invalid timestamp value");
 	}
 }
 
@@ -116,6 +116,10 @@ Time operator*(Time time, int mul)
 
 Time operator/(Time time, int div)
 {
+	if (div == 0)
+	{
+		throw std::invalid_argument("devision by zero");
+	}
 	auto h = time.GetHours() / div;
 	auto m = time.GetMinutes() / div;
 	m += std::round(((static_cast<double>(time.GetHours()) / div - h) * SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
@@ -126,6 +130,11 @@ Time operator/(Time time, int div)
 
 unsigned operator/(Time time, Time div)
 {
+	if (div.m_timestamp == 0)
+	{
+		throw std::invalid_argument("devision by zero");
+	}
+
 	return time.m_timestamp / div.m_timestamp;
 }
 
@@ -175,14 +184,14 @@ std::istream& operator>>(std::istream& stream, Time& time)
 	auto args = Explode(str, ":");
 	if (args.size() != 3)
 	{
-		throw std::logic_error("Incorrect time string");
+		throw std::invalid_argument("Incorrect time string");
 	}
 	auto h = std::stoi(args[0]);
 	auto m = std::stoi(args[1]);
 	auto s = std::stoi(args[2]);
-	if (h > 23 || m > 59 || s > 59 || h < 0 || m < 0 || s < 0)
+	if (Time::Validate(h, m, s))
 	{
-		throw std::logic_error("Invalid input arguments");
+		throw std::invalid_argument("Invalid input arguments");
 	}
 	time.m_timestamp = h * SECONDS_PER_HOUR + m * SECONDS_PER_MINUTE + s;
 	return stream;
@@ -257,4 +266,9 @@ Time Time::TimestampAdjustmentForMul(Time time, int mul)
 	}
 	time.m_timestamp = newTimestamp;
 	return time;
+}
+
+bool Time::Validate(unsigned hours, unsigned minutes, unsigned seconds)
+{
+	return hours > 23 || minutes > 59 || seconds > 59 || hours < 0 || minutes < 0 || seconds < 0;
 }

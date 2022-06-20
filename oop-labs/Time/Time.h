@@ -38,6 +38,7 @@ private:
 	static Time TimestampAdjustmentForAdd(Time, unsigned);
 	static Time TimestampAdjustmentForSub(Time, unsigned);
 	static Time TimestampAdjustmentForMul(Time, int);
+	static bool Validate(unsigned hours, unsigned minutes, unsigned seconds);
 
 	unsigned m_timestamp;
 };
