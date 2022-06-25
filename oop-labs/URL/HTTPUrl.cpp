@@ -23,7 +23,7 @@ namespace url
 using namespace protocols;
 using namespace errors;
 
-const std::regex url_regex(R"((https?)://([0-9A-Za-z\-.]+)(?::(\d+))?(?:/(.*))?)", std::regex::icase);
+const std::regex url_regex(R"((.*)://([0-9A-Za-z\-.]+)(?::(\d+))?(?:/(.*))?)", std::regex::icase);
 
 HTTPUrl::HTTPUrl(std::string const& url)
 {
@@ -44,6 +44,8 @@ HTTPUrl::HTTPUrl(std::string const& domain, std::string const& document, Protoco
 	  , m_protocol(protocol)
 	  , m_port(GetDefaultPortMap().at(protocol))
 {
+	checkDomain(domain);
+	checkDocument(document);
 }
 
 HTTPUrl::HTTPUrl(std::string const& domain, std::string const& document, Protocol protocol, unsigned short port)
@@ -52,6 +54,8 @@ HTTPUrl::HTTPUrl(std::string const& domain, std::string const& document, Protoco
 	  , m_protocol(protocol)
 	  , m_port(port)
 {
+	checkDomain(domain);
+	checkDocument(document);
 	checkPort(port);
 }
 
@@ -91,10 +95,7 @@ unsigned short HTTPUrl::GetPort() const
 
 std::string HTTPUrl::ParseDomain(std::string const& domain) const
 {
-	if (domain.empty())
-	{
-		throw UrlParsingError::InvalidUrl();
-	}
+	checkDomain(domain);
 	return domain;
 }
 
@@ -139,15 +140,31 @@ unsigned short HTTPUrl::ParsePort(std::string const& port) const
 	{
 		throw UrlParsingError::InvalidPort(ex.what());
 	}
-	checkPort(static_cast<unsigned short>(result));
+	checkPort(result);
 	return static_cast<unsigned short>(result);
 }
 
-void HTTPUrl::checkPort(unsigned short port) const
+void HTTPUrl::checkPort(unsigned long port) const
 {
 	if (port <= 0 || port > std::numeric_limits<unsigned short>::max())
 	{
 		throw UrlParsingError::PortOutOfRange();
+	}
+}
+
+void HTTPUrl::checkDomain(const std::string& domain) const
+{
+	if (domain.empty())
+	{
+		throw UrlParsingError::InvalidUrl();
+	}
+}
+
+void HTTPUrl::checkDocument(const std::string& document) const
+{
+	if (document.empty())
+	{
+		throw UrlParsingError::InvalidUrl();
 	}
 }
 

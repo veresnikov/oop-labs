@@ -44,7 +44,11 @@ private:
 
 	unsigned short ParsePort(std::string const& port) const;
 
-	void checkPort(unsigned short port) const;
+	void checkPort(unsigned long port) const;
+
+	void checkDomain(const std::string& domain) const;
+
+	void checkDocument(const std::string& document) const;
 
 	static std::string PortToString(unsigned short protocol);
 };
