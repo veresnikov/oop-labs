@@ -45,6 +45,9 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Canvas</Filter>
     </ClCompile>
+    <ClCompile Include="ShapesController.cpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IShape.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Canvas.h">
       <Filter>Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapesController.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
