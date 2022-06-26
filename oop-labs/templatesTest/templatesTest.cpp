@@ -1,7 +1,7 @@
 ﻿#define CATCH_CONFIG_MAIN
 #include "../catch2/catch.hpp"
 #include "FindEx.h"
-
+#include "MyArray.h"
 
 TEST_CASE("Test findEx function")
 {
@@ -54,5 +54,148 @@ TEST_CASE("Test findEx function")
 		REQUIRE(task1::FindMax(test, fat, [](const Person& first, const Person& second) -> bool { return first.weight < second.weight; }));
 		REQUIRE(fat.name == "Petr");
 		REQUIRE(fat.weight == 80);
+	}
+}
+
+TEST_CASE("Test MyArray<int> class")
+{
+	SECTION("Positive tests")
+	{
+		SECTION("Create empty")
+		{
+			MyArray<int> empty;
+			REQUIRE(empty.GetSize() == 0);
+			REQUIRE(empty.GetCapacity() == 0);
+		}
+		SECTION("Create from copy constructor")
+		{
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			MyArray test(original);
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 3);
+			REQUIRE(original.GetSize() == 3);
+			REQUIRE(original.GetCapacity() == 4);
+		}
+		SECTION("Create from move constructor")
+		{
+			MyArray<int>&& original{};
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			MyArray<int> test(std::move(original));
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 4);
+			REQUIRE(original.GetSize() == 0);
+			REQUIRE(original.GetCapacity() == 0);
+		}
+		SECTION("Check resize")
+		{
+			MyArray<int> empty;
+			empty.Resize(5);
+			REQUIRE(empty.GetSize() == 0);
+			REQUIRE(empty.GetCapacity() == 5);
+		}
+		SECTION("Check append")
+		{
+			MyArray<int> empty;
+			empty.Append(5);
+			REQUIRE(empty.GetSize() == 1);
+			REQUIRE(empty.GetCapacity() == 1);
+			empty.Append(42);
+			REQUIRE(empty.GetSize() == 2);
+			REQUIRE(empty.GetCapacity() == 2);
+			empty.Append(42);
+			REQUIRE(empty.GetSize() == 3);
+			REQUIRE(empty.GetCapacity() == 4);
+		}
+		SECTION("Check copy operator")
+		{
+			MyArray<int> test;
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			test = original;
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 3);
+			REQUIRE(original.GetSize() == 3);
+			REQUIRE(original.GetCapacity() == 4);
+		}
+		SECTION("Check move operator")
+		{
+			MyArray<int> test;
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			test = std::move(original);
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 4);
+			REQUIRE(original.GetSize() == 0);
+			REQUIRE(original.GetCapacity() == 0);
+		}
+		SECTION("Check index access")
+		{
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			const auto& constItem = original[1];
+			REQUIRE(constItem == 2);
+			auto& item = original[0];
+			REQUIRE(item == 1);
+		}
+		SECTION("Check clear")
+		{
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+			REQUIRE(original.GetSize() == 3);
+			REQUIRE(original.GetCapacity() == 4);
+			original.Clear();
+			REQUIRE(original.GetSize() == 0);
+			REQUIRE(original.GetCapacity() == 0);
+		}
+		SECTION("Check iterators")
+		{
+			MyArray<int> original;
+			original.Append(1);
+			original.Append(2);
+			original.Append(3);
+
+			REQUIRE(*original.begin() == 1);
+			REQUIRE(*(++original.begin()) == 2);
+			REQUIRE(*(--original.end()) == 3);
+			REQUIRE(*(original.rbegin()) == 3);
+			REQUIRE(*(++original.rbegin()) == 2);
+			REQUIRE(*(--original.rend()) == 1);
+		}
+	}
+	SECTION("Negative tests")
+	{
+		SECTION("Bad alloc")
+		{
+			MyArray<int> test;
+			test.Append(1);
+			test.Append(2);
+			test.Append(3);
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 4);
+			REQUIRE_THROWS(test.Resize(999999999));
+			REQUIRE(test.GetSize() == 3);
+			REQUIRE(test.GetCapacity() == 4);
+		}
+		SECTION("Index out of range")
+		{
+			MyArray<int> test;
+			test.Append(1);
+			test.Append(2);
+			test.Append(3);
+			REQUIRE_THROWS(test[3]);
+		}
 	}
 }

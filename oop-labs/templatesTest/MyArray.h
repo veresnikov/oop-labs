@@ -45,6 +45,42 @@ template <typename T> class MyArray
 			return self += offset;
 		}
 
+		MyType& operator-=(difference_type offset)
+		{
+			m_item -= offset;
+			return *this;
+		}
+
+		MyType operator-(difference_type offset) const
+		{
+			MyType self(m_item);
+			return self -= offset;
+		}
+
+		MyType& operator++()
+		{
+			return *this += 1;
+		}
+
+		MyType operator++(int)
+		{
+			auto self = *this;
+			++(*this);
+			return self;
+		}
+
+		MyType& operator--()
+		{
+			return *this -= 1;
+		}
+
+		MyType operator--(int)
+		{
+			auto self = *this;
+			--(*this);
+			return self;
+		}
+
 		friend MyType operator+(difference_type offset, const MyType& it)
 		{
 			return it + offset;
@@ -93,7 +129,7 @@ public:
 
 	MyArray& operator=(const MyArray& other)
 	{
-		if (std::addressof(other) != std::addressof(this))
+		if (std::addressof(other) != this)
 		{
 			MyArray copy(other);
 			std::swap(m_begin, copy.m_begin);
@@ -105,7 +141,7 @@ public:
 
 	MyArray& operator=(MyArray&& other) noexcept
 	{
-		if (std::addressof(other) != std::addressof(this))
+		if (std::addressof(other) != this)
 		{
 			DeleteItems(m_begin, m_end);
 			m_begin = other.m_begin;
@@ -135,28 +171,9 @@ public:
 	{
 		if (m_end == m_endOfCapacity) // no free space
 		{
-			size_t newCapacity = std::max(1, GetCapacity() * 2);
-
-			auto newBegin = RawAlloc(newCapacity);
-			T* newEnd = newBegin;
-			try
-			{
-				CopyItems(m_begin, m_end, newBegin, newEnd);
-				// Конструируем копию value по адресу newItemLocation
-				new(newEnd) T(value);
-				++newEnd;
-			}
-			catch (...)
-			{
-				DeleteItems(newBegin, newEnd);
-				throw;
-			}
-			DeleteItems(m_begin, m_end);
-
-			// Переключаемся на использование нового хранилища элементов
-			m_begin = newBegin;
-			m_end = newEnd;
-			m_endOfCapacity = m_begin + newCapacity;
+			Resize(std::max(static_cast<size_t>(1), GetCapacity() * 2));
+			new (m_end) T(value);
+			++m_end;
 		}
 		else // has free space
 		{
@@ -165,10 +182,43 @@ public:
 		}
 	}
 
+	void Resize(size_t size)
+	{
+		auto newBegin = RawAlloc(size);
+		T* newEnd = newBegin;
+		try
+		{
+			CopyItems(m_begin, m_end, newBegin, newEnd);
+			auto empty = size - (newEnd - newBegin);
+			if (empty != 0)
+			{
+				T* copyEnd = newEnd;
+				for (size_t i = 0; i < empty; ++i)
+				{
+					new (copyEnd) T();
+					++copyEnd;
+				}
+			}
+		}
+		catch (...)
+		{
+			DeleteItems(newBegin, newEnd);
+			throw;
+		}
+		DeleteItems(m_begin, m_end);
+
+		// Переключаемся на использование нового хранилища элементов
+		m_begin = newBegin;
+		m_end = newEnd;
+		m_endOfCapacity = m_begin + size;
+	}
+
 	void Clear()
 	{
 		DeleteItems(m_begin, m_end);
-		m_endOfCapacity = 0;
+		m_begin = nullptr;
+		m_end = nullptr;
+		m_endOfCapacity = nullptr;
 	}
 
 	size_t GetSize() const
