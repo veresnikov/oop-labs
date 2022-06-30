@@ -28,16 +28,9 @@ public:
 
 	~CStringList()
 	{
-		size_t batch = 1000;
-		while (m_size > 0 && m_begin->next != nullptr)
+		while (m_begin->next != nullptr)
 		{
-			Item* item = m_begin.get();
-			for (size_t i = 0; i < (m_size - batch) && m_size > batch; ++i)
-			{
-				item = item->next.get();
-			}
-			item->next.reset();
-			m_size -= batch;
+			m_begin = std::move(m_begin->next);
 		}
 	}
 
