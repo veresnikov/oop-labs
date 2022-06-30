@@ -65,9 +65,9 @@ std::string HTTPUrl::GetURL() const
 	std::string url = ProtocolToString(protocol);
 	url.append("://");
 	url.append(GetDomain());
-	if (const auto port = GetPort(); GetDefaultPortMap().at(protocol) != port)
+	if (IsDefaultPort())
 	{
-		url.append(PortToString(port));
+		url.append(PortToString(m_port));
 	}
 	url.append(GetDocument());
 	return url;
@@ -91,6 +91,11 @@ Protocol HTTPUrl::GetProtocol() const
 unsigned short HTTPUrl::GetPort() const
 {
 	return m_port;
+}
+
+bool HTTPUrl::IsDefaultPort() const
+{
+	return GetDefaultPortMap().at(m_protocol) != m_port;
 }
 
 std::string HTTPUrl::ParseDomain(std::string const& domain) const
@@ -131,10 +136,10 @@ Protocol HTTPUrl::ParseProtocol(std::string const& protocol) const
 
 unsigned short HTTPUrl::ParsePort(std::string const& port) const
 {
-	unsigned long result;
+	int result;
 	try
 	{
-		result = std::stoul(port);
+		result = std::stoi(port);
 	}
 	catch (const std::exception& ex)
 	{

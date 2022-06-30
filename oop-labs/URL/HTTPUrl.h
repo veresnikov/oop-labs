@@ -30,6 +30,8 @@ public:
 
 	unsigned short GetPort() const;
 
+	bool IsDefaultPort() const;
+
 private:
 	std::string m_domain;
 	std::string m_document;

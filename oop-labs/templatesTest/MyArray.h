@@ -88,6 +88,7 @@ template <typename T> class MyArray
 
 	protected:
 		T* m_item = nullptr;
+		// уточнить насчет начала и конца, не в рамках этой работы
 	};
 
 public:
@@ -171,6 +172,7 @@ public:
 	{
 		if (m_end == m_endOfCapacity) // no free space
 		{
+			// при вставке элемента из себя же, будет неопределенное поведение
 			Resize(std::max(static_cast<size_t>(1), GetCapacity() * 2));
 			new (m_end) T(value);
 			++m_end;
@@ -184,6 +186,7 @@ public:
 
 	void Resize(size_t size)
 	{
+		// в меньшую сторону
 		auto newBegin = RawAlloc(size);
 		T* newEnd = newBegin;
 		try
@@ -196,6 +199,7 @@ public:
 				for (size_t i = 0; i < empty; ++i)
 				{
 					new (copyEnd) T();
+					// не удаляются пустые элементы
 					++copyEnd;
 				}
 			}
@@ -215,6 +219,7 @@ public:
 
 	void Clear()
 	{
+		//вызов деструкторов, без освобождения памяти
 		DeleteItems(m_begin, m_end);
 		m_begin = nullptr;
 		m_end = nullptr;
@@ -338,6 +343,7 @@ private:
 		free(p);
 	}
 
+	//const не нужен, с маленькой буквы
 	void checkIndex(const size_t index) const
 	{
 		if (index >= GetSize())

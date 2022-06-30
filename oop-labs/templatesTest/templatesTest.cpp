@@ -6,6 +6,12 @@
 TEST_CASE("Test findEx function")
 {
 	auto StringPredicate = [](const std::string& first, const std::string& second) -> bool { return first > second; };
+	SECTION("Test with empty vector")
+	{
+		std::vector<std::string> test;
+		std::string max;
+		REQUIRE(task1::FindMax(test, max, StringPredicate) == false);
+	}
 	SECTION("Test with 1 item in vector")
 	{
 		std::vector<std::string> test{ "test" };
