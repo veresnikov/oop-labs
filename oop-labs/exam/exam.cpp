@@ -28,7 +28,7 @@ public:
 
 	~CStringList()
 	{
-		while (m_begin->next != nullptr)
+		while (m_begin != nullptr)
 		{
 			m_begin = std::move(m_begin->next);
 		}
@@ -91,23 +91,41 @@ private:
 	void Copy(const CStringList& list)
 	{
 		Item* item = list.m_begin.get();
+		unique_ptr<Item> newList;
 		Item* lastItem = nullptr;
+		size_t newSize = 0;
 		while (item != nullptr)
 		{
-			if (!lastItem)
+			if (newList == nullptr)
 			{
-				m_begin = make_unique<Item>(item->value, nullptr);
-				lastItem = m_begin.get();
+				newList = make_unique<Item>(item->value, nullptr);
+				++newSize;
+				lastItem = newList.get();
+				item = item->next.get();
+				continue;
+			}
+			if (lastItem)
+			{
+				lastItem->next = make_unique<Item>(item->value, nullptr);
+				++newSize;
+				lastItem = lastItem->next.get();
 			}
 			else
 			{
-				lastItem->next = make_unique<Item>(item->value, nullptr);
-				lastItem = lastItem->next.get();
+				throw runtime_error("error in copy process");
 			}
 			item = item->next.get();
 		}
-		m_size = list.m_size;
+		unique_ptr<Item> oldList = std::move(m_begin);
+		while (oldList != nullptr)
+		{
+			oldList = std::move(oldList->next);
+		}
+
+		m_begin = move(newList);
+		m_size = newSize;
 	}
+
 };
 
 int main()
