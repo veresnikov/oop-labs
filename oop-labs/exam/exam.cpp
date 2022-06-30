@@ -32,7 +32,6 @@ public:
 		while (m_size > 0 && m_begin->next != nullptr)
 		{
 			Item* item = m_begin.get();
-			auto index = m_size - batch;
 			for (size_t i = 0; i < (m_size - batch) && m_size > batch; ++i)
 			{
 				item = item->next.get();
@@ -126,7 +125,6 @@ int main()
 	lst.AddToBegin("three");
 	assert(lst.GetSize() == 3);
 	assert(lst.GetFront() == "three");
-
 	CStringList lst1(lst);
 	lst1.PrintList(cout); // Должно быть выведено: three two one (по одному слову в каждой строке)
 	cout << endl;
