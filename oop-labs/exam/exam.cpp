@@ -28,10 +28,7 @@ public:
 
 	~CStringList()
 	{
-		while (m_begin != nullptr)
-		{
-			m_begin = std::move(m_begin->next);
-		}
+		CollapseList(std::move(m_begin));
 	}
 
 	CStringList& operator=(const CStringList& list)
@@ -88,44 +85,54 @@ private:
 	size_t m_size = 0;
 	unique_ptr<Item> m_begin;
 
+	void CollapseList(unique_ptr<Item> list)
+	{
+		while (list != nullptr)
+		{
+			list = std::move(list->next);
+		}
+	}
+
 	void Copy(const CStringList& list)
 	{
 		Item* item = list.m_begin.get();
 		unique_ptr<Item> newList;
 		Item* lastItem = nullptr;
 		size_t newSize = 0;
-		while (item != nullptr)
+		try
 		{
-			if (newList == nullptr)
+			while (item != nullptr)
 			{
-				newList = make_unique<Item>(item->value, nullptr);
-				++newSize;
-				lastItem = newList.get();
+				if (newList == nullptr)
+				{
+					newList = make_unique<Item>(item->value, nullptr);
+					++newSize;
+					lastItem = newList.get();
+					item = item->next.get();
+					continue;
+				}
+				if (lastItem)
+				{
+					lastItem->next = make_unique<Item>(item->value, nullptr);
+					++newSize;
+					lastItem = lastItem->next.get();
+				}
+				else
+				{
+					throw runtime_error("error in copy process");
+				}
 				item = item->next.get();
-				continue;
 			}
-			if (lastItem)
-			{
-				lastItem->next = make_unique<Item>(item->value, nullptr);
-				++newSize;
-				lastItem = lastItem->next.get();
-			}
-			else
-			{
-				throw runtime_error("error in copy process");
-			}
-			item = item->next.get();
 		}
-		unique_ptr<Item> oldList = std::move(m_begin);
-		while (oldList != nullptr)
+		catch (...)
 		{
-			oldList = std::move(oldList->next);
+			CollapseList(move(newList));
+			throw;
 		}
-
+		CollapseList(std::move(m_begin));
 		m_begin = move(newList);
 		m_size = newSize;
 	}
-
 };
 
 int main()
